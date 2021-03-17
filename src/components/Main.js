@@ -7,6 +7,8 @@ const Main = () => {
   const [loading, setLoading] = useState(true);
   const [characters, setCharacters] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const [nextPage, setNextPage] = useState("");
+  const [prevPage, setPrevPage] = useState("");
 
   const fetchCharacters = async () => {
     try {
@@ -15,6 +17,8 @@ const Main = () => {
         .then((res) => {
           setLoading(false);
           setCharacters(res.data.results);
+          setNextPage(res.data.info.next);
+          setPrevPage(res.data.info.prev);
         })
         .catch((err) => {
           setLoading(false);
@@ -28,6 +32,24 @@ const Main = () => {
   useEffect(() => {
     fetchCharacters();
   }, []);
+
+  const fetchNextCharacters = () => {
+    axios.get(nextPage).then((res) => {
+      setNextPage(res.data.info.next);
+      setPrevPage(res.data.info.prev);
+      setCharacters(res.data.results);
+
+      console.log("res.data :>> de next ", res.data);
+    });
+  };
+  const fetchPrevCharacters = () => {
+    axios.get(prevPage).then((res) => {
+      setPrevPage(res.data.info.prev);
+      setCharacters(res.data.results);
+
+      console.log("res.data :>> ", res.data);
+    });
+  };
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -36,7 +58,10 @@ const Main = () => {
     try {
       axios
         .get(`https://rickandmortyapi.com/api/character/?name=${searchInput}`)
-        .then((res) => console.log("res.data :>> ", res.data))
+        .then((res) => {
+          setCharacters(res.data.results);
+          console.log("res.data :>> ", res.data);
+        })
         .catch((err) => console.log("err :>> ", err));
     } catch (error) {
       console.log("error :>> ", error);
@@ -58,6 +83,16 @@ const Main = () => {
         <button type="submit">Rechercher</button>
       </form>
       <Character character={characters} />
+      {prevPage === null ? (
+        ""
+      ) : (
+        <button onClick={fetchPrevCharacters}>Precedent</button>
+      )}
+      {nextPage === null ? (
+        ""
+      ) : (
+        <button onClick={fetchNextCharacters}>Suivant</button>
+      )}
     </section>
   );
 };

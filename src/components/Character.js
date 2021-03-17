@@ -2,7 +2,6 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 
 const Character = ({ character }) => {
-  console.log("props :>> ", character);
   let history = useHistory();
   return (
     <div className="character-container">
