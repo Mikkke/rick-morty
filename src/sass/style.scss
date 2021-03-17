@@ -1,1 +1,31 @@
 @import "./reset.scss";
+@font-face {
+  font-family: "Schifty";
+  src: url("../static/font/get_schwifty.ttf");
+}
+
+.main-section {
+  height: auto;
+  border: 1px solid red;
+}
+.character-container {
+  border: 1px solid black;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+
+  .card {
+    /* padding: 2rem; */
+    margin: 2rem;
+    border: 1px solid purple;
+    font-family: "Schifty";
+    color: #98bf5e;
+    text-align: center;
+    > * {
+      padding: 0.3rem;
+    }
+    .card-img {
+      width: 13rem;
+    }
+  }
+}
